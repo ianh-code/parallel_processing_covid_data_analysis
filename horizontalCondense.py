@@ -67,7 +67,8 @@ def main():
     df.drop('critical_staffing_shortage_anticipated_within_week_no', inplace=True, axis=1)
     df.drop('critical_staffing_shortage_anticipated_within_week_not_reported',inplace=True,axis=1)
     
-    print(df)
+    # print(df)
+    df.to_csv("Tennessee_Covid_Data_Col_Condense.csv")
 ​
     return 0
 ​
