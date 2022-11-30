@@ -3,6 +3,9 @@ import pandas as pd
 import datetime as dt
 from pandas.api.types import is_numeric_dtype
 import sys
+import time
+
+num_procs = 16
     
 def condense_month(df, ind):
     ind_limit = len(df.index)
@@ -25,7 +28,6 @@ def condense_month(df, ind):
                     accums[col_ind] += val
         count += 1
     
-    av_args = [(df, i, accums[i], ind, count) for i in range(len(accums))]
     for i, v in enumerate(accums):
         accums[i] = float(v) / float(count) if v is not None else df.iloc[ind, i]
     return accums
@@ -56,7 +58,7 @@ def condense_months(df, inds):
     numMonths = len(inds)
     args_arr = [(df, inds[i]) for i in range(numMonths)]
     
-    with mp.Pool(processes=16) as pool:
+    with mp.Pool(processes=num_procs) as pool:
         result = pool.map(format_condense, args_arr)
     result = pd.DataFrame(result)
     result.columns = list(df.columns)
@@ -67,18 +69,22 @@ def build_initial_table(filename):
     return covid_data
 
 def main():
-    if len(sys.argv > 1):
+    if len(sys.argv) > 1:
         fname = sys.argv[1]
     else:
         fname = "Tennessee_Covid_Data.csv"
-    if len(sys.argv > 2):
+    if len(sys.argv) > 2:
         out_fname = sys.argv[2]
     else:
         out_fname = "Condensed_Tennessee_Covid_Data.csv"
     covid_data = build_initial_table(fname)
+    
     month_inds = get_month_inds(covid_data)
     condensed = condense_months(covid_data, month_inds)
     condensed.to_csv(out_fname)
 
 if __name__ == "__main__":
+    start_t = time.time()
     main()
+    end_t = time.time()
+    print(f"{num_procs} processes: {end_t - start_t} seconds")
