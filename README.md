@@ -4,6 +4,10 @@ Project contributors: Patrick Burnett, Warren Russel, and Ian Hurd
 
 ## Horizontal Condense
 
+The program **horizontalCondense.py** condenses all sets of columns with 'yes' 'no' and 'not_reported'. The program runs in parallel and takes one argument, which is the name of the input file.
+
+The program outputs a new CSV file, and also prints the amount of time taken to run.
+
 ## Vertical Condense
 
 The programs **parallelCondenseMonths.py** and **groupbyCondenseMonths.py** will take a csv file of data sorted by date, and with no repeat days. It will take the mean of each column's data for each month, and output a new CSV file with one row for each month, with each numerical data field containing the mean of that field over the course of the given month.
@@ -18,4 +22,4 @@ Both programs do the same thing, but **parallelCondenseMonths.py** runs with a s
 
 In **parallelCondenseMonths.py**, you can change the number of processors by going into the source code and changing the value of the environment variable **num_procs**.
 
-Each program outputs time taken.
+Each program prints time taken to execute.
